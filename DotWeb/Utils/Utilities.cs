@@ -1,9 +1,10 @@
-﻿using System.Net;
+﻿using DotWeb.Core;
+using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 
-namespace DotWeb;
+namespace DotWeb.Utils;
 
 public class Utilities
 {
@@ -16,22 +17,16 @@ public class Utilities
         return ret;
     }
 
-    public static string GetWorkingDirectory()
+    public static string GetExecutableDirectory()
     {
         string executablePath = Assembly.GetExecutingAssembly().Location;
         string executableDirectory = Path.GetDirectoryName(executablePath);
         return executableDirectory;
     }
-
-    public static Dictionary<HttpStatusCode, string> ErrorPages = new Dictionary<HttpStatusCode, string>()
-    {
-        { HttpStatusCode.Forbidden, "/errors/403.html" },
-        { HttpStatusCode.NotFound, "/errors/404.html" }
-    };
     
     public static byte[] GetImage(string fullPath)
     {
-        var filePath = $"{GetWorkingDirectory()}{Common.ServerDirectory}{fullPath}";
+        var filePath = $"{GetExecutableDirectory()}{Common.ServerDirectory}{fullPath}";
         Common.Log.WriteLine(Log.LogLevel.Info, $"File path: {filePath}");
         if(File.Exists(filePath))
         {
@@ -53,23 +48,23 @@ public class Utilities
 
     public static byte[] GetFile(string fullPath)
     {
-        var filePath = $"{GetWorkingDirectory()}{Common.ServerDirectory}{fullPath}";
+        var filePath = $"{GetExecutableDirectory()}{Common.ServerDirectory}{fullPath}";
         Common.Log.WriteLine(Log.LogLevel.Info, $"File path: {filePath}");
         if(File.Exists(filePath))
         {
             if(fullPath.StartsWith("/system"))
-                return GetFile(ErrorPages[HttpStatusCode.Forbidden]);
+                return GetFile(Router.ErrorHandlers[HttpStatusCode.Forbidden]);
             string text = File.ReadAllText(filePath);
             return Encoding.UTF8.GetBytes(text);
         }
         else
-            return GetFile(ErrorPages[HttpStatusCode.NotFound]);
+            return GetFile(Router.ErrorHandlers[HttpStatusCode.NotFound]);
     }
 
     public static byte[] GetSource(string fullPath)
     {
         if(fullPath == "/" || fullPath == string.Empty)
-            fullPath = "/index.html";
+            fullPath = Common.DefaultPage;
         return GetFile(fullPath);
     }
 }

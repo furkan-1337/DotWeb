@@ -67,6 +67,12 @@ public class Server
         Router.Handlers.Add((method, path, action));
         return this;
     }
+
+    public Server AddErrorHandler(HttpStatusCode code, string path)
+    {
+        Router.ErrorHandlers.Add(code, path);
+        return this;
+    }
     
     public Server Add(List<IPAddress> ipAddresses, int port = 0)
     {

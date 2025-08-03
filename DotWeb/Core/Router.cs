@@ -36,6 +36,7 @@ public class Router
         await response.OutputStream.WriteAsync(packet.Data, 0, packet.Data.Length);
         response.OutputStream.Close();
     }
-
+    
+    public static Dictionary<HttpStatusCode, string> ErrorHandlers = new Dictionary<HttpStatusCode, string>();
     public List<(string Method, string Path, Func<Parameters, string> action)> Handlers = new List<(string Method, string Path, Func<Parameters, string> action)>();
 }

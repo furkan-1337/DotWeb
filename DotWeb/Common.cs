@@ -5,6 +5,7 @@ namespace DotWeb;
 
 public class Common
 {
+    public static string DefaultPage = "/index.html";
     public static string ServerDirectory = "/web";
     public static INativeWrapper Platform { get; private set; }
     public static Log Log { get; private set; } = new Log();

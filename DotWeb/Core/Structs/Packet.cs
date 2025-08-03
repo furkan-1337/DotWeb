@@ -1,4 +1,5 @@
 ﻿using DotWeb.Core.Enums;
+using DotWeb.Utils;
 using System.Text;
 
 namespace DotWeb.Core.Structs;
